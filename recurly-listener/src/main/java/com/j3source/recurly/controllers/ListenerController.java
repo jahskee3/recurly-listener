@@ -28,9 +28,9 @@ public class ListenerController {
         return "hello";
     }
     
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@RequestMapping(value = "/listener", method = RequestMethod.GET)
     public String hello(ModelMap model) {
         model.addAttribute("msg", "Testing Recurly webhook listener!");
-        return "test";
+        return "listener";
     }
 }
