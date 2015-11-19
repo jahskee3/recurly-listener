@@ -12,13 +12,14 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import com.j3source.recurly.events.notifications.CanceledAccountNotification;
+import com.j3source.recurly.events.notifications.NewAccountNotification;
 
 
 
 public class UnmarshallTest {
 
 	public static void main(String[] args) throws JAXBException, JDOMException, IOException {
-		String xmlData= "<?xml version='1.0' encoding='UTF-8'?><canceled_account_notification>  <account>    <account_code>1</account_code>    <username nil='true'>jahskee</username>    <email>verena@example.com</email>    <first_name>Verena</first_name>    <last_name>Example</last_name>    <company_name nil='true'></company_name>  </account></canceled_account_notification>";
+		String xmlData= "<?xml version='1.0' encoding='UTF-8'?><new_account_notification>  <account>    <account_code>1</account_code>    <username nil='true'>jahskee</username>    <email>verena@example.com</email>    <first_name>Verena</first_name>    <last_name>Example</last_name>    <company_name nil='true'></company_name>  </account></new_account_notification>";
 				
 		Class notificationClass = getNotificationClass(xmlData);
 		
@@ -30,6 +31,8 @@ public class UnmarshallTest {
 		
 		if(event instanceof CanceledAccountNotification){
 			System.out.println("Cancel account: "+event.toString());
+		}else if(event instanceof NewAccountNotification){
+			System.out.println("New account: "+event.toString());
 		}
 		//System.out.println("hello");
 		//System.out.println(event.toString());
@@ -41,7 +44,9 @@ public class UnmarshallTest {
 		String rootElementName=getRootElementName(xmlData);
 		if(rootElementName.equals("canceled_account_notification")){
 			notificationClass=CanceledAccountNotification.class;
-		}		
+		}else if(rootElementName.equals("new_account_notification")){
+			notificationClass=NewAccountNotification.class;
+		}
 		return notificationClass;
 	}
 	
