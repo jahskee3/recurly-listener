@@ -19,4 +19,13 @@ public class PlanE {
 	public String getName() {
 		return name;
 	}
+	
+	@Override
+	public String toString() {
+		final StringBuilder sb = new StringBuilder("PlanE{");
+		sb.append("planCode='").append(this.getPlanCode()).append('\'');
+		sb.append(", name='").append(this.getName()).append('\'');
+		sb.append('}');
+		return sb.toString();
+	}
 }

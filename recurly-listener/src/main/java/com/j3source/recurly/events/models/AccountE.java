@@ -51,12 +51,12 @@ public class AccountE {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("AccountE{");
-		sb.append("accountCode='").append(accountCode).append('\'');
-		sb.append(", username='").append(username).append('\'');
-		sb.append(", email='").append(email).append('\'');
-		sb.append(", firstName='").append(firstName).append('\'');
-		sb.append(", lastName='").append(lastName).append('\'');
-		sb.append(", companyName='").append(companyName).append('\'');
+		sb.append("accountCode='").append(this.getAccountCode()).append('\'');
+		sb.append(", username='").append(this.getUsername()).append('\'');
+		sb.append(", email='").append(this.getEmail()).append('\'');
+		sb.append(", firstName='").append(this.getFirstName()).append('\'');
+		sb.append(", lastName='").append(this.getLastName()).append('\'');
+		sb.append(", companyName='").append(this.getCompanyName()).append('\'');
 		sb.append('}');
 		return sb.toString();
 	}
