@@ -30,18 +30,25 @@ import com.j3source.recurly.controllers.listener.events.notifications.Successful
 import com.j3source.recurly.controllers.listener.events.notifications.SuccessfulRefundNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.UpdatedSubscriptionNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.VoidPaymentNotification;
+import com.j3source.recurly.controllers.listener.handler.RecurlyWebhook;
+import com.j3source.recurly.controllers.listener.handler.Webhook;
 
 public class UnmarshallUtil {
 
 
 	public static void eventAction(String xmlData) throws JDOMException, IOException, JAXBException{
+		Webhook webhook = new RecurlyWebhook();
+		
 		Object event = getEvent(xmlData);		
 		if(event instanceof CanceledAccountNotification){
-			System.out.println("Cancel account: "+event.toString());
+			webhook.canceledAccountNotification((CanceledAccountNotification)event);
+			
 		}else if(event instanceof NewAccountNotification){
 			System.out.println("New account: "+event.toString());
+			
 		}else if(event instanceof BillingInfoUpdatedNotification){
-			System.out.println("Billing info updated: "+event.toString());
+			webhook.billingInfoUpdateNotification((BillingInfoUpdatedNotification)event);
+			
 		}else if(event instanceof ReactivatedAccountNotification){
 			System.out.println("Reactivated Account: "+event.toString());
 		}else if(event instanceof NewInvoiceNotification){
