@@ -22,6 +22,7 @@ import com.j3source.recurly.controllers.listener.events.notifications.NewSubscri
 import com.j3source.recurly.controllers.listener.events.notifications.PastDueInvoiceNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.ProcessingInvoiceNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.ReactivatedAccountNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.RenewedSubscriptionNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.UpdatedSubscriptionNotification;
 
 public class UnmarshallUtil {
@@ -62,6 +63,9 @@ public class UnmarshallUtil {
 		
 		String expiredSubscriptionNotificationData="<?xml version='1.0' encoding='UTF-8'?> <expired_subscription_notification> <account> <account_code>1</account_code> <username nil='true'></username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> <subscription> <plan> <plan_code>1dpt</plan_code> <name>Subscription One</name> </plan> <uuid>292332928954ca62fa48048be5ac98ec</uuid> <state>active</state> <quantity type='integer'>1</quantity> <total_amount_in_cents type='integer'>200</total_amount_in_cents> <activated_at type='datetime'>2010-09-23T22:12:39Z</activated_at> <canceled_at nil='true' type='datetime'></canceled_at> <expires_at nil='true' type='datetime'></expires_at> <current_period_started_at type='datetime'>2010-09-23T22:03:30Z</current_period_started_at> <current_period_ends_at type='datetime'>2010-09-24T22:03:30Z</current_period_ends_at> <trial_started_at nil='true' type='datetime'> </trial_started_at> <trial_ends_at nil='true' type='datetime'> </trial_ends_at> <collection_method>automatic</collection_method> </subscription> </expired_subscription_notification>";
 		UnmarshallUtil.eventAction(expiredSubscriptionNotificationData);
+		
+		String renewedSubscriptionNotificationData="<?xml version='1.0' encoding='UTF-8'?> <renewed_subscription_notification> <account> <account_code>1</account_code> <username nil='true'></username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> <subscription> <plan> <plan_code>1dpt</plan_code> <name>Subscription One</name> </plan> <uuid>292332928954ca62fa48048be5ac98ec</uuid> <state>active</state> <quantity type='integer'>1</quantity> <total_amount_in_cents type='integer'>200</total_amount_in_cents> <activated_at type='datetime'>2010-09-23T22:12:39Z</activated_at> <canceled_at nil='true' type='datetime'></canceled_at> <expires_at nil='true' type='datetime'></expires_at> <current_period_started_at type='datetime'>2010-09-23T22:03:30Z</current_period_started_at> <current_period_ends_at type='datetime'>2010-09-24T22:03:30Z</current_period_ends_at> <trial_started_at nil='true' type='datetime'> </trial_started_at> <trial_ends_at nil='true' type='datetime'> </trial_ends_at> <collection_method>automatic</collection_method> </subscription> </renewed_subscription_notification>";
+		UnmarshallUtil.eventAction(renewedSubscriptionNotificationData);
 	}
 	
 	public static void eventAction(String xmlData) throws JDOMException, IOException, JAXBException{
@@ -90,6 +94,8 @@ public class UnmarshallUtil {
 			System.out.println("Canceled Subscription : "+event.toString());
 		}else if(event instanceof ExpiredSubscriptionNotification){
 			System.out.println("Expired Subscription : "+event.toString());
+		}else if(event instanceof RenewedSubscriptionNotification){
+			System.out.println("Renewed Subscription : "+event.toString());
 		}
 		
 	}
@@ -121,6 +127,8 @@ public class UnmarshallUtil {
 			notificationClass=CanceledSubscriptionNotification.class;
 		}else if(rootElementName.equals("expired_subscription_notification")){
 			notificationClass=ExpiredSubscriptionNotification.class;
+		}else if(rootElementName.equals("renewed_subscription_notification")){
+			notificationClass=RenewedSubscriptionNotification.class;
 		}
 		
 		return notificationClass;
