@@ -41,48 +41,62 @@ public class UnmarshallUtil {
 		
 		Object event = getEvent(xmlData);		
 		if(event instanceof CanceledAccountNotification){
-			webhook.canceledAccountNotification((CanceledAccountNotification)event);
+			webhook.canceledAccountNotification((CanceledAccountNotification) event);
 			
 		}else if(event instanceof NewAccountNotification){
-			System.out.println("New account: "+event.toString());
+			webhook.newAccountNotification((NewAccountNotification) event);
 			
 		}else if(event instanceof BillingInfoUpdatedNotification){
-			webhook.billingInfoUpdateNotification((BillingInfoUpdatedNotification)event);
+			webhook.billingInfoUpdateNotification((BillingInfoUpdatedNotification) event);
 			
 		}else if(event instanceof ReactivatedAccountNotification){
-			System.out.println("Reactivated Account: "+event.toString());
+			webhook.reactivatedAccountNotification((ReactivatedAccountNotification) event);
+			
 		}else if(event instanceof NewInvoiceNotification){
-			System.out.println("New Invoice : "+event.toString());
+			webhook.newInvoiceNotification((NewInvoiceNotification)event);
+			
 		}else if(event instanceof ProcessingInvoiceNotification){
-			System.out.println("Processing Invoice : "+event.toString());
+			webhook.processingInvoiceNotification((ProcessingInvoiceNotification)event);
+			
 		}else if(event instanceof ClosedInvoiceNotification){
-			System.out.println("Closed Invoice : "+event.toString());
+			webhook.closedInvoiceNotification((ClosedInvoiceNotification) event);
+			
 		}else if(event instanceof PastDueInvoiceNotification){
-			System.out.println("Past Due Invoice : "+event.toString());
+			webhook.pastDueInvoiceNotification((PastDueInvoiceNotification) event);
+			
 		}else if(event instanceof NewSubscriptionNotification){
-			System.out.println("New Subscription : "+event.toString());
+			webhook.newSubscriptionNotification((NewSubscriptionNotification) event);			
+			
 		}else if(event instanceof UpdatedSubscriptionNotification){
-			System.out.println("Updated Subscription : "+event.toString());
+			webhook.updatedSubscriptionNotification((UpdatedSubscriptionNotification) event);
+			
 		}else if(event instanceof CanceledSubscriptionNotification){
-			System.out.println("Canceled Subscription : "+event.toString());
+			webhook.canceledSubscriptionNotification((CanceledSubscriptionNotification) event);
+			
 		}else if(event instanceof ExpiredSubscriptionNotification){
-			System.out.println("Expired Subscription : "+event.toString());
+			webhook.expiredSubscriptionNotification((ExpiredSubscriptionNotification) event);
+				
 		}else if(event instanceof RenewedSubscriptionNotification){
-			System.out.println("Renewed Subscription : "+event.toString());
+			webhook.renewedSubscriptionNotification((RenewedSubscriptionNotification) event);
+			
 		}else if(event instanceof SuccessfulPaymentNotification){
-			System.out.println("Successful Payment : "+event.toString());
+			webhook.successfulPaymentNotification((SuccessfulPaymentNotification) event);
+			
 		}else if(event instanceof ScheduledPaymentNotification){
-			System.out.println("Scheduled Payment : "+event.toString());
+			webhook.scheduledPaymentNotification((ScheduledPaymentNotification) event);
+			
 		}else if(event instanceof ProcessingPaymentNotification){
-			System.out.println("Processing Payment : "+event.toString());
+			webhook.processingPaymentNotification((ProcessingPaymentNotification) event);
+			
 		}else if(event instanceof FailedPaymentNotification){
-			System.out.println("Failed Payment : "+event.toString());
+			webhook.failedPaymentNotification((FailedPaymentNotification) event);
+			
 		}else if(event instanceof SuccessfulRefundNotification){
-			System.out.println("Successful Refund : "+event.toString());
+			webhook.successfulRefundNotification((SuccessfulRefundNotification) event);
+			
 		}else if(event instanceof VoidPaymentNotification){
-			System.out.println("Void Payment : "+event.toString());
-		}
-		
+			webhook.voidPaymentNotification((VoidPaymentNotification) event);			
+		}		
 	}
 	
 	private static Class getNotificationClass(String xmlData) throws JDOMException, IOException{
@@ -126,8 +140,7 @@ public class UnmarshallUtil {
 			notificationClass=SuccessfulRefundNotification.class;
 		}else if(rootElementName.equals("void_payment_notification")){
 			notificationClass=VoidPaymentNotification.class;
-		}
-	
+		}		
 		return notificationClass;
 	}
 	
