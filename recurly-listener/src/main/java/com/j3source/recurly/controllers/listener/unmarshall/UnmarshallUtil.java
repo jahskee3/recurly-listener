@@ -23,6 +23,7 @@ import com.j3source.recurly.controllers.listener.events.notifications.PastDueInv
 import com.j3source.recurly.controllers.listener.events.notifications.ProcessingInvoiceNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.ReactivatedAccountNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.RenewedSubscriptionNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.SuccessfulPaymentNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.UpdatedSubscriptionNotification;
 
 public class UnmarshallUtil {
@@ -66,6 +67,9 @@ public class UnmarshallUtil {
 		
 		String renewedSubscriptionNotificationData="<?xml version='1.0' encoding='UTF-8'?> <renewed_subscription_notification> <account> <account_code>1</account_code> <username nil='true'></username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> <subscription> <plan> <plan_code>1dpt</plan_code> <name>Subscription One</name> </plan> <uuid>292332928954ca62fa48048be5ac98ec</uuid> <state>active</state> <quantity type='integer'>1</quantity> <total_amount_in_cents type='integer'>200</total_amount_in_cents> <activated_at type='datetime'>2010-09-23T22:12:39Z</activated_at> <canceled_at nil='true' type='datetime'></canceled_at> <expires_at nil='true' type='datetime'></expires_at> <current_period_started_at type='datetime'>2010-09-23T22:03:30Z</current_period_started_at> <current_period_ends_at type='datetime'>2010-09-24T22:03:30Z</current_period_ends_at> <trial_started_at nil='true' type='datetime'> </trial_started_at> <trial_ends_at nil='true' type='datetime'> </trial_ends_at> <collection_method>automatic</collection_method> </subscription> </renewed_subscription_notification>";
 		UnmarshallUtil.eventAction(renewedSubscriptionNotificationData);
+		
+		String successfulPaymentNotificationData="<?xml version='1.0' encoding='UTF-8'?> <successful_payment_notification> <account> <account_code>1</account_code> <username nil='true'>verena</username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'>Company, Inc.</company_name> </account> <transaction> <id>a5143c1d3a6f4a8287d0e2cc1d4c0427</id> <invoice_id>1974a09kj90s0789dsf099798326881c</invoice_id> <invoice_number type='integer'>2059</invoice_number> <subscription_id>1974a098jhlkjasdfljkha898326881c</subscription_id> <action>purchase</action> <date type='datetime'>2009-11-22T13:10:38Z</date> <amount_in_cents type='integer'>1000</amount_in_cents> <status>success</status> <message>Bogus Gateway: Forced success</message> <reference></reference> <source>subscription</source> <cvv_result code=''></cvv_result> <avs_result code=''></avs_result> <avs_result_street></avs_result_street> <avs_result_postal></avs_result_postal> <test type='boolean'>true</test> <voidable type='boolean'>true</voidable> <refundable type='boolean'>true</refundable> <manually_entered type='boolean'>true</manually_entered> <payment_method>credit_card</payment_method> </transaction> </successful_payment_notification>";
+		UnmarshallUtil.eventAction(successfulPaymentNotificationData);
 	}
 	
 	public static void eventAction(String xmlData) throws JDOMException, IOException, JAXBException{
@@ -96,7 +100,10 @@ public class UnmarshallUtil {
 			System.out.println("Expired Subscription : "+event.toString());
 		}else if(event instanceof RenewedSubscriptionNotification){
 			System.out.println("Renewed Subscription : "+event.toString());
+		}else if(event instanceof SuccessfulPaymentNotification){
+			System.out.println("Successful Payment : "+event.toString());
 		}
+		
 		
 	}
 	
@@ -129,6 +136,8 @@ public class UnmarshallUtil {
 			notificationClass=ExpiredSubscriptionNotification.class;
 		}else if(rootElementName.equals("renewed_subscription_notification")){
 			notificationClass=RenewedSubscriptionNotification.class;
+		}else if(rootElementName.equals("successful_payment_notification")){
+			notificationClass=SuccessfulPaymentNotification.class;
 		}
 		
 		return notificationClass;
