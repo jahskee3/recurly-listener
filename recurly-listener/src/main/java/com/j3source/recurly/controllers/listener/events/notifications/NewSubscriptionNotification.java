@@ -6,9 +6,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.j3source.recurly.controllers.listener.events.models.AccountE;
 import com.j3source.recurly.controllers.listener.events.models.SubscriptionE;
 
-@XmlRootElement(name = "reactivated_account_notification")
-public class ReactivatedAccountNotification {
-	
+@XmlRootElement(name = "new_subscription_notification")
+public class NewSubscriptionNotification {
+
 	@XmlElement(name = "account")
 	private AccountE account;
 	
@@ -25,10 +25,11 @@ public class ReactivatedAccountNotification {
 	
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder("ReactivatedAccountNotification{");
+		final StringBuilder sb = new StringBuilder("NewSubscriptionNotification{");
 		sb.append("account='").append(this.getAccount().toString());
 		sb.append(", subscription='").append(this.getSubscription().toString());
 		sb.append('}');
 		return sb.toString();
-	}
+	}	
+	
 }

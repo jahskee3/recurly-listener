@@ -10,7 +10,11 @@ public class PlanE {
 	private String planCode;
 	
 	@XmlElement(name = "name")
-	private String name;
+	private String name;	
+
+	@XmlElement(name = "version")
+	private Integer version;
+	
 
 	public String getPlanCode() {
 		return planCode;
@@ -20,11 +24,16 @@ public class PlanE {
 		return name;
 	}
 	
+	public Integer getVersion() {
+		return version;
+	}
+	
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("PlanE{");
 		sb.append("planCode='").append(this.getPlanCode()).append('\'');
 		sb.append(", name='").append(this.getName()).append('\'');
+		sb.append(", version='").append(this.getVersion()).append('\'');
 		sb.append('}');
 		return sb.toString();
 	}

@@ -13,8 +13,12 @@ import org.jdom2.input.SAXBuilder;
 
 import com.j3source.recurly.controllers.listener.events.notifications.BillingInfoUpdatedNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.CanceledAccountNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.ClosedInvoiceNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.NewAccountNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.NewInvoiceNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.NewSubscriptionNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.PastDueInvoiceNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.ProcessingInvoiceNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.ReactivatedAccountNotification;
 
 public class UnmarshallUtil {
@@ -34,6 +38,19 @@ public class UnmarshallUtil {
 		
 		String newInvoiceNotificationData="<?xml version='1.0' encoding='UTF-8'?> <new_invoice_notification> <account> <account_code>1</account_code> <username nil='true'></username> <email>verena@example.com</email> <first_name>Verana</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> <invoice> <uuid>ffc64d71d4b5404e93f13aac9c63b007</uuid> <subscription_id nil='true'></subscription_id> <state>open</state> <invoice_number_prefix></invoice_number_prefix> <invoice_number type='integer'>1000</invoice_number> <po_number></po_number> <vat_number></vat_number> <total_in_cents type='integer'>1000</total_in_cents> <currency>USD</currency> <date type='datetime'>2014-01-01T20:21:44Z</date> <closed_at type='datetime' nil='true'></closed_at> </invoice> </new_invoice_notification>";
 		UnmarshallUtil.eventAction(newInvoiceNotificationData);
+		
+		String processingInvoiceNotificationData="<?xml version='1.0' encoding='UTF-8'?> <processing_invoice_notification> <account> <account_code>1</account_code> <username nil='true'></username> <email>verena@example.com</email> <first_name>Verana</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> <invoice> <uuid>ffc64d71d4b5404e93f13aac9c63b007</uuid> <subscription_id nil='true'></subscription_id> <state>processing</state> <invoice_number_prefix></invoice_number_prefix> <invoice_number type='integer'>1000</invoice_number> <po_number></po_number> <vat_number></vat_number> <total_in_cents type='integer'>1000</total_in_cents> <currency>USD</currency> <date type='datetime'>2014-01-01T20:21:44Z</date> <closed_at type='datetime' nil='true'></closed_at> <net_terms type='integer'>0</net_terms> <collection_method>automatic</collection_method> </invoice> </processing_invoice_notification>";
+		UnmarshallUtil.eventAction(processingInvoiceNotificationData);	
+		
+		String closedInvoiceNotificationData="<?xml version='1.0' encoding='UTF-8'?> <closed_invoice_notification> <account> <account_code>1</account_code> <username nil='true'></username> <email>verena@example.com</email> <first_name>Verana</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> <invoice> <uuid>ffc64d71d4b5404e93f13aac9c63b007</uuid> <subscription_id nil='true'></subscription_id> <state>collected</state> <invoice_number_prefix></invoice_number_prefix> <invoice_number type='integer'>1000</invoice_number> <po_number></po_number> <vat_number></vat_number> <total_in_cents type='integer'>1100</total_in_cents> <currency>USD</currency> <date type='datetime'>2014-01-01T20:20:29Z</date> <closed_at type='datetime'>2014-01-01T20:24:02Z</closed_at> </invoice> </closed_invoice_notification>";
+		UnmarshallUtil.eventAction(closedInvoiceNotificationData);
+		
+		String pastDueInvoiceNotificationData="<?xml version='1.0' encoding='UTF-8'?> <past_due_invoice_notification> <account> <account_code>1</account_code> <username nil='true'></username> <email>verena@example.com</email> <first_name>Verana</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> <invoice> <uuid>ffc64d71d4b5404e93f13aac9c63b007</uuid> <subscription_id nil='true'></subscription_id> <state>collected</state> <invoice_number_prefix></invoice_number_prefix> <invoice_number type='integer'>1000</invoice_number> <po_number></po_number> <vat_number></vat_number> <total_in_cents type='integer'>1100</total_in_cents> <currency>USD</currency> <date type='datetime'>2014-01-01T20:20:29Z</date> <closed_at type='datetime'>2014-01-01T20:24:02Z</closed_at> </invoice> </past_due_invoice_notification>";
+		UnmarshallUtil.eventAction(pastDueInvoiceNotificationData);
+		
+		String newSubscriptionNotificationData="<?xml version='1.0' encoding='UTF-8'?> <new_subscription_notification> <account> <account_code>1</account_code> <username nil='true'>verena</username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'>Company, Inc.</company_name> </account> <subscription> <plan> <plan_code>bronze</plan_code> <name>Bronze Plan</name> <version type='integer'>2</version> </plan> <uuid>8047cb4fd5f874b14d713d785436ebd3</uuid> <state>active</state> <quantity type='integer'>2</quantity> <total_amount_in_cents type='integer'>2000</total_amount_in_cents> <activated_at type='datetime'>2009-11-22T13:10:38Z</activated_at> <canceled_at type='datetime'></canceled_at> <expires_at type='datetime'></expires_at> <current_period_started_at type='datetime'>2009-11-22T13:10:38Z</current_period_started_at> <current_period_ends_at type='datetime'>2009-11-29T13:10:38Z</current_period_ends_at> <trial_started_at type='datetime'>2009-11-22T13:10:38Z</trial_started_at> <trial_ends_at type='datetime'>2009-11-29T13:10:38Z</trial_ends_at> <collection_method>automatic</collection_method> </subscription> </new_subscription_notification>";
+		UnmarshallUtil.eventAction(newSubscriptionNotificationData);
+				
 	}
 	
 	public static void eventAction(String xmlData) throws JDOMException, IOException, JAXBException{
@@ -48,17 +65,16 @@ public class UnmarshallUtil {
 			System.out.println("Reactivated Account: "+event.toString());
 		}else if(event instanceof NewInvoiceNotification){
 			System.out.println("New Invoice : "+event.toString());
+		}else if(event instanceof ProcessingInvoiceNotification){
+			System.out.println("Processing Invoice : "+event.toString());
+		}else if(event instanceof ClosedInvoiceNotification){
+			System.out.println("Closed Invoice : "+event.toString());
+		}else if(event instanceof PastDueInvoiceNotification){
+			System.out.println("Past Due Invoice : "+event.toString());
+		}else if(event instanceof NewSubscriptionNotification){
+			System.out.println("New Subscription : "+event.toString());
 		}
 	}
-	
-	private static Object getEvent(String xmlData) throws JDOMException, IOException, JAXBException{
-		Class notificationClass = getNotificationClass(xmlData);		
-		JAXBContext jaxbContext = JAXBContext.newInstance(notificationClass);
-		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-		StringReader reader = new StringReader(xmlData);		
-		Object event = (Object) unmarshaller.unmarshal(reader);
-		return event;
-	}	
 	
 	private static Class getNotificationClass(String xmlData) throws JDOMException, IOException{
 		Class notificationClass = null;
@@ -73,10 +89,27 @@ public class UnmarshallUtil {
 			notificationClass=ReactivatedAccountNotification.class;
 		}else if(rootElementName.equals("new_invoice_notification")){
 			notificationClass=NewInvoiceNotification.class;
+		}else if(rootElementName.equals("processing_invoice_notification")){
+			notificationClass=ProcessingInvoiceNotification.class;
+		}else if(rootElementName.equals("closed_invoice_notification")){
+			notificationClass=ClosedInvoiceNotification.class;
+		}else if(rootElementName.equals("past_due_invoice_notification")){
+			notificationClass=PastDueInvoiceNotification.class;
+		}else if(rootElementName.equals("new_subscription_notification")){
+			notificationClass=NewSubscriptionNotification.class;
 		}
 		
 		return notificationClass;
 	}
+	
+	private static Object getEvent(String xmlData) throws JDOMException, IOException, JAXBException{
+		Class notificationClass = getNotificationClass(xmlData);		
+		JAXBContext jaxbContext = JAXBContext.newInstance(notificationClass);
+		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+		StringReader reader = new StringReader(xmlData);		
+		Object event = (Object) unmarshaller.unmarshal(reader);
+		return event;
+	}	
 	
 	private static String getRootElementName(String xmlData) throws JDOMException, IOException{
 		SAXBuilder saxBuilder = new SAXBuilder();		

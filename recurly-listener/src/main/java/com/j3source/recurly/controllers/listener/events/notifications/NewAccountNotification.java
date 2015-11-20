@@ -17,7 +17,7 @@ public class NewAccountNotification {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("NewAccountNotification{");
-		sb.append(", account='").append(account.toString());
+		sb.append("account='").append(account.toString());
 		sb.append('}');
 		return sb.toString();
 	}

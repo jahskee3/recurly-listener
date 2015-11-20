@@ -17,7 +17,7 @@ public class BillingInfoUpdatedNotification {
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("BillingInfoUpdatedNotification{");
-		sb.append(", account='").append(account.toString());
+		sb.append("account='").append(account.toString());
 		sb.append('}');
 		return sb.toString();
 	}

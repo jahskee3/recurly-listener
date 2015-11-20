@@ -18,7 +18,7 @@ public class CanceledAccountNotification{
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("CanceledAccountNotification{");
-		sb.append(", account='").append(account.toString());
+		sb.append("account='").append(account.toString());
 		sb.append('}');
 		return sb.toString();
 	}
