@@ -17,12 +17,12 @@ import com.j3source.recurly.events.notifications.NewAccountNotification;
 
 
 
-public class UnmarshallTest {
+public class UnmarshallUtil {
 
 	public static void main(String[] args) throws JAXBException, JDOMException, IOException {
 		String xmlData= "<?xml version='1.0' encoding='UTF-8'?><new_account_notification>  <account>    <account_code>1</account_code>    <username nil='true'>jahskee</username>    <email>verena@example.com</email>    <first_name>Verena</first_name>    <last_name>Example</last_name>    <company_name nil='true'></company_name>  </account></new_account_notification>";
 				
-		UnmarshallTest.eventAction(xmlData);
+		UnmarshallUtil.eventAction(xmlData);
 	
 		//System.out.println("hello");
 		//System.out.println(event.toString());

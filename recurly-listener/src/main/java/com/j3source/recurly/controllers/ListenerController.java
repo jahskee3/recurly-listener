@@ -14,7 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.j3source.recurly.unmarshall.UnmarshallTest;
+import com.j3source.recurly.unmarshall.UnmarshallUtil;
 
 @Controller
 public class ListenerController {
@@ -29,7 +29,7 @@ public class ListenerController {
     	IOUtils.copy(xml, writer, "UTF-8");
     	String xmlData = writer.toString();
         
-    	UnmarshallTest.eventAction(xmlData);
+    	UnmarshallUtil.eventAction(xmlData);
     	
         
     }
