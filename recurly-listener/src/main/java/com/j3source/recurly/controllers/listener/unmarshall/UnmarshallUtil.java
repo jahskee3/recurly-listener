@@ -14,6 +14,7 @@ import org.jdom2.input.SAXBuilder;
 import com.j3source.recurly.controllers.listener.events.notifications.BillingInfoUpdatedNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.CanceledAccountNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.NewAccountNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.NewInvoiceNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.ReactivatedAccountNotification;
 
 public class UnmarshallUtil {
@@ -30,6 +31,9 @@ public class UnmarshallUtil {
 		
 		String reactivatedAccountNotificationData="<?xml version='1.0' encoding='UTF-8'?> <reactivated_account_notification><account><account_code>1</account_code><username nil='true'></username><email>verena@example.com</email><first_name>Verena</first_name><last_name>Example</last_name><company_name nil='true'></company_name></account><subscription><plan><plan_code>bootstrap</plan_code><name>Bootstrap</name></plan><uuid>6ab458a887d38070807ebb3bed7ac1e5</uuid><state>active</state><quantity type='integer'>1</quantity><total_amount_in_cents type='integer'>9900</total_amount_in_cents><activated_at type='datetime'>2010-07-22T20:42:05Z</activated_at> <canceled_at nil='true' type='datetime'></canceled_at> <expires_at nil='true' type='datetime'></expires_at> <current_period_started_at type='datetime'>2010-09-22T20:42:05Z</current_period_started_at> <current_period_ends_at type='datetime'>2010-10-22T20:42:05Z</current_period_ends_at> <trial_started_at nil='true' type='datetime'></trial_started_at> <trial_ends_at nil='true' type='datetime'></trial_ends_at> <collection_method>automatic</collection_method> </subscription> </reactivated_account_notification>";
 		UnmarshallUtil.eventAction(reactivatedAccountNotificationData);
+		
+		String newInvoiceNotificationData="<?xml version='1.0' encoding='UTF-8'?> <new_invoice_notification> <account> <account_code>1</account_code> <username nil='true'></username> <email>verena@example.com</email> <first_name>Verana</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> <invoice> <uuid>ffc64d71d4b5404e93f13aac9c63b007</uuid> <subscription_id nil='true'></subscription_id> <state>open</state> <invoice_number_prefix></invoice_number_prefix> <invoice_number type='integer'>1000</invoice_number> <po_number></po_number> <vat_number></vat_number> <total_in_cents type='integer'>1000</total_in_cents> <currency>USD</currency> <date type='datetime'>2014-01-01T20:21:44Z</date> <closed_at type='datetime' nil='true'></closed_at> </invoice> </new_invoice_notification>";
+		UnmarshallUtil.eventAction(newInvoiceNotificationData);
 	}
 	
 	public static void eventAction(String xmlData) throws JDOMException, IOException, JAXBException{
@@ -42,19 +46,19 @@ public class UnmarshallUtil {
 			System.out.println("Billing info updated: "+event.toString());
 		}else if(event instanceof ReactivatedAccountNotification){
 			System.out.println("Reactivated Account: "+event.toString());
+		}else if(event instanceof NewInvoiceNotification){
+			System.out.println("New Invoice : "+event.toString());
 		}
 	}
 	
 	private static Object getEvent(String xmlData) throws JDOMException, IOException, JAXBException{
-		Class notificationClass = getNotificationClass(xmlData);
-		
+		Class notificationClass = getNotificationClass(xmlData);		
 		JAXBContext jaxbContext = JAXBContext.newInstance(notificationClass);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 		StringReader reader = new StringReader(xmlData);		
 		Object event = (Object) unmarshaller.unmarshal(reader);
 		return event;
-	}
-	
+	}	
 	
 	private static Class getNotificationClass(String xmlData) throws JDOMException, IOException{
 		Class notificationClass = null;
@@ -67,6 +71,8 @@ public class UnmarshallUtil {
 			notificationClass=BillingInfoUpdatedNotification.class;
 		}else if(rootElementName.equals("reactivated_account_notification")){
 			notificationClass=ReactivatedAccountNotification.class;
+		}else if(rootElementName.equals("new_invoice_notification")){
+			notificationClass=NewInvoiceNotification.class;
 		}
 		
 		return notificationClass;

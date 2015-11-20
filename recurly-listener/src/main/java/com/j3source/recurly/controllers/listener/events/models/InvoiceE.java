@@ -40,7 +40,14 @@ public class InvoiceE {
 	
 	@XmlElement(name = "closed_at")
 	private DateTime closedAt;
-
+	 
+	@XmlElement(name = "net_terms_type")
+	private Integer netTerms;	
+	
+	@XmlElement(name = "collection_method")
+	private String collectionMethod;
+	    
+	    
 	public String getUuid() {
 		return uuid;
 	}
@@ -85,6 +92,14 @@ public class InvoiceE {
 		return closedAt;
 	}
 	
+	public Integer getNetTerms() {
+		return netTerms;
+	}
+
+	public String getCollectionMethod() {
+		return collectionMethod;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("InvoiceE{");
@@ -99,6 +114,8 @@ public class InvoiceE {
 		sb.append("currency='").append(this.getCurrency()).append('\'');
 		sb.append("date='").append(this.getDate()).append('\'');
 		sb.append("closedAt='").append(this.getClosedAt()).append('\'');
+		sb.append("netTerms='").append(this.getNetTerms()).append('\'');
+		sb.append("collectionMethod='").append(this.getCollectionMethod()).append('\'');
 		sb.append('}');
 		return sb.toString();
 	}
