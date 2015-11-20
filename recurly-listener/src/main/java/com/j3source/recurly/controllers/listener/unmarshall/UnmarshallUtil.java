@@ -16,6 +16,7 @@ import com.j3source.recurly.controllers.listener.events.notifications.CanceledAc
 import com.j3source.recurly.controllers.listener.events.notifications.CanceledSubscriptionNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.ClosedInvoiceNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.ExpiredSubscriptionNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.FailedPaymentNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.NewAccountNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.NewInvoiceNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.NewSubscriptionNotification;
@@ -26,7 +27,9 @@ import com.j3source.recurly.controllers.listener.events.notifications.Reactivate
 import com.j3source.recurly.controllers.listener.events.notifications.RenewedSubscriptionNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.ScheduledPaymentNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.SuccessfulPaymentNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.SuccessfulRefundNotification;
 import com.j3source.recurly.controllers.listener.events.notifications.UpdatedSubscriptionNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.VoidPaymentNotification;
 
 public class UnmarshallUtil {
 
@@ -78,6 +81,15 @@ public class UnmarshallUtil {
 		
 		String processingPaymentNotificationData="<?xml version='1.0' encoding='UTF-8'?> <processing_payment_notification> <account> <account_code>1</account_code> <username nil='true'>verena</username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'>Company, Inc.</company_name> </account> <transaction> <id>a5143c1d3a6f4a8287d0e2cc1d4c0427</id> <invoice_id>1974a09kj90s0789dsf099798326881c</invoice_id> <invoice_number type='integer'>2059</invoice_number> <subscription_id>1974a098jhlkjasdfljkha898326881c</subscription_id> <action>purchase</action> <date type='datetime'>2009-11-22T13:10:38Z</date> <amount_in_cents type='integer'>1000</amount_in_cents> <status>success</status> <message>Bogus Gateway: Forced success</message> <reference></reference> <source>subscription</source> <cvv_result code=''></cvv_result> <avs_result code=''></avs_result> <avs_result_street></avs_result_street> <avs_result_postal></avs_result_postal> <test type='boolean'>true</test> <voidable type='boolean'>true</voidable> <refundable type='boolean'>true</refundable> <manually_entered type='boolean'>true</manually_entered> <payment_method>credit_card</payment_method> </transaction> </processing_payment_notification>";
 		UnmarshallUtil.eventAction(processingPaymentNotificationData);
+		
+		String failedPaymentNotificationData="<?xml version='1.0' encoding='UTF-8'?> <failed_payment_notification> <account> <account_code>1</account_code> <username nil='true'>verena</username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'>Company, Inc.</company_name> </account> <transaction> <id>a5143c1d3a6f4a8287d0e2cc1d4c0427</id> <invoice_id>1974a09kj90s0789dsf099798326881c</invoice_id> <invoice_number type='integer'>2059</invoice_number> <subscription_id>1974a098jhlkjasdfljkha898326881c</subscription_id> <action>purchase</action> <date type='datetime'>2009-11-22T13:10:38Z</date> <amount_in_cents type='integer'>1000</amount_in_cents> <status>success</status> <message>Bogus Gateway: Forced success</message> <reference></reference> <source>subscription</source> <cvv_result code=''></cvv_result> <avs_result code=''></avs_result> <avs_result_street></avs_result_street> <avs_result_postal></avs_result_postal> <test type='boolean'>true</test> <voidable type='boolean'>true</voidable> <refundable type='boolean'>true</refundable> <manually_entered type='boolean'>true</manually_entered> <payment_method>credit_card</payment_method> </transaction> </failed_payment_notification>";
+		UnmarshallUtil.eventAction(failedPaymentNotificationData);
+		
+		String successfulRefundNotificationData="<?xml version='1.0' encoding='UTF-8'?> <successful_refund_notification> <account> <account_code>1</account_code> <username nil='true'>verena</username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'>Company, Inc.</company_name> </account> <transaction> <id>a5143c1d3a6f4a8287d0e2cc1d4c0427</id> <invoice_id>1974a09kj90s0789dsf099798326881c</invoice_id> <invoice_number type='integer'>2059</invoice_number> <subscription_id>1974a098jhlkjasdfljkha898326881c</subscription_id> <action>purchase</action> <date type='datetime'>2009-11-22T13:10:38Z</date> <amount_in_cents type='integer'>1000</amount_in_cents> <status>success</status> <message>Bogus Gateway: Forced success</message> <reference></reference> <source>subscription</source> <cvv_result code=''></cvv_result> <avs_result code=''></avs_result> <avs_result_street></avs_result_street> <avs_result_postal></avs_result_postal> <test type='boolean'>true</test> <voidable type='boolean'>true</voidable> <refundable type='boolean'>true</refundable> <manually_entered type='boolean'>true</manually_entered> <payment_method>credit_card</payment_method> </transaction> </successful_refund_notification>";
+		UnmarshallUtil.eventAction(successfulRefundNotificationData);
+		
+		String voidPaymentNotificationData="<?xml version='1.0' encoding='UTF-8'?> <void_payment_notification> <account> <account_code>1</account_code> <username nil='true'>verena</username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'>Company, Inc.</company_name> </account> <transaction> <id>a5143c1d3a6f4a8287d0e2cc1d4c0427</id> <invoice_id>1974a09kj90s0789dsf099798326881c</invoice_id> <invoice_number type='integer'>2059</invoice_number> <subscription_id>1974a098jhlkjasdfljkha898326881c</subscription_id> <action>purchase</action> <date type='datetime'>2009-11-22T13:10:38Z</date> <amount_in_cents type='integer'>1000</amount_in_cents> <status>success</status> <message>Bogus Gateway: Forced success</message> <reference></reference> <source>subscription</source> <cvv_result code=''></cvv_result> <avs_result code=''></avs_result> <avs_result_street></avs_result_street> <avs_result_postal></avs_result_postal> <test type='boolean'>true</test> <voidable type='boolean'>true</voidable> <refundable type='boolean'>true</refundable> <manually_entered type='boolean'>true</manually_entered> <payment_method>credit_card</payment_method> </transaction> </void_payment_notification>";
+		UnmarshallUtil.eventAction(voidPaymentNotificationData);
 	}
 	
 	public static void eventAction(String xmlData) throws JDOMException, IOException, JAXBException{
@@ -114,8 +126,13 @@ public class UnmarshallUtil {
 			System.out.println("Scheduled Payment : "+event.toString());
 		}else if(event instanceof ProcessingPaymentNotification){
 			System.out.println("Processing Payment : "+event.toString());
+		}else if(event instanceof FailedPaymentNotification){
+			System.out.println("Failed Payment : "+event.toString());
+		}else if(event instanceof SuccessfulRefundNotification){
+			System.out.println("Successful Refund : "+event.toString());
+		}else if(event instanceof VoidPaymentNotification){
+			System.out.println("Void Payment : "+event.toString());
 		}
-		
 		
 	}
 	
@@ -154,8 +171,14 @@ public class UnmarshallUtil {
 			notificationClass=ScheduledPaymentNotification.class;
 		}else if(rootElementName.equals("processing_payment_notification")){
 			notificationClass=ProcessingPaymentNotification.class;
+		}else if(rootElementName.equals("failed_payment_notification")){
+			notificationClass=FailedPaymentNotification.class;
+		}else if(rootElementName.equals("successful_refund_notification")){
+			notificationClass=SuccessfulRefundNotification.class;
+		}else if(rootElementName.equals("void_payment_notification")){
+			notificationClass=VoidPaymentNotification.class;
 		}
-		
+	
 		return notificationClass;
 	}
 	
