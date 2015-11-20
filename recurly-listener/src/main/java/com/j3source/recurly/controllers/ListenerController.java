@@ -14,7 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.j3source.recurly.unmarshall.UnmarshallUtil;
+import com.j3source.recurly.controllers.listener.unmarshall.UnmarshallUtil;
 
 @Controller
 public class ListenerController {

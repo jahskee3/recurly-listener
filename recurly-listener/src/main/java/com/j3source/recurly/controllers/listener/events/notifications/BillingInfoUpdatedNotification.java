@@ -1,9 +1,9 @@
-package com.j3source.recurly.events.notifications;
+package com.j3source.recurly.controllers.listener.events.notifications;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.j3source.recurly.events.models.AccountE;
+import com.j3source.recurly.controllers.listener.events.models.AccountE;
 
 @XmlRootElement(name = "billing_info_updated_notification")
 public class BillingInfoUpdatedNotification {

@@ -1,4 +1,4 @@
-package com.j3source.recurly.unmarshall;
+package com.j3source.recurly.controllers.listener.unmarshall;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -11,12 +11,10 @@ import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
-import com.j3source.recurly.events.notifications.BillingInfoUpdatedNotification;
-import com.j3source.recurly.events.notifications.CanceledAccountNotification;
-import com.j3source.recurly.events.notifications.NewAccountNotification;
-import com.j3source.recurly.events.notifications.ReactivatedAccountNotification;
-
-
+import com.j3source.recurly.controllers.listener.events.notifications.BillingInfoUpdatedNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.CanceledAccountNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.NewAccountNotification;
+import com.j3source.recurly.controllers.listener.events.notifications.ReactivatedAccountNotification;
 
 public class UnmarshallUtil {
 

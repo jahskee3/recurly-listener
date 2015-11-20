@@ -1,4 +1,4 @@
-package com.j3source.recurly.events.models;
+package com.j3source.recurly.controllers.listener.events.models;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
