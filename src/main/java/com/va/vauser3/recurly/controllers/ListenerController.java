@@ -22,8 +22,8 @@ public class ListenerController {
 
     @RequestMapping(value = "/listener", method = RequestMethod.POST)
     public void listenerPost(ModelMap model, HttpServletRequest request) throws IOException, JDOMException, JAXBException {
-    	String host = request.getHeader("Host");
-    	String contentType = request.getHeader("Content-Type");
+//    	String host = request.getHeader("Host");
+//    	String contentType = request.getHeader("Content-Type");
     	InputStream xml = request.getInputStream();
     	
     	StringWriter writer = new StringWriter();
