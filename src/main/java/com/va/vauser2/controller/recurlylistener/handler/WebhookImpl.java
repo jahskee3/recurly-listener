@@ -1,11 +1,11 @@
 package com.va.vauser2.controller.recurlylistener.handler;
 
-import org.apache.log4j.Logger;
+
 import com.va.vauser2.controller.recurlylistener.events.notifications.*;
 
-public class RecurlyWebhook implements Webhook {
+public class WebhookImpl implements Webhook {
 
-	private static final Logger log = Logger.getLogger(RecurlyWebhook.class);
+	private static final Logger log = Logger.getLogger(WebhookImpl.class);
 	
 	public void billingInfoUpdateNotification(BillingInfoUpdatedNotification event) {
 		log.info("Billing Info Updated: "+event.toString());

@@ -12,15 +12,15 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import com.va.vauser2.controller.recurlylistener.events.notifications.*;
-import com.va.vauser2.controller.recurlylistener.handler.RecurlyWebhook;
 import com.va.vauser2.controller.recurlylistener.handler.Webhook;
+import com.va.vauser2.controller.recurlylistener.handler.WebhookImpl;
 
 
 public class UnmarshallUtil {
 
 
 	public static void eventAction(String xmlData) throws JDOMException, IOException, JAXBException{
-		Webhook webhook = new RecurlyWebhook();
+		Webhook webhook = new WebhookImpl();
 		
 		Object event = getEvent(xmlData);		
 		if(event instanceof CanceledAccountNotification){
