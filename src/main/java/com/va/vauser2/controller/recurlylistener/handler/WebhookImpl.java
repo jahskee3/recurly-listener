@@ -1,6 +1,8 @@
 package com.va.vauser2.controller.recurlylistener.handler;
 
 
+import org.apache.log4j.Logger;
+
 import com.va.vauser2.controller.recurlylistener.events.notifications.*;
 
 public class WebhookImpl implements Webhook {
