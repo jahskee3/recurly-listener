@@ -75,8 +75,9 @@ public class RecurlyListenerController {
 		AccountE account = notification.getAccount();		
 		Connection dbConn=null;
 		try{
-			
-			dbConn = DbUtil.getTempConnection(Configuration.DB_NAME, Configuration.DB_USER, Configuration.DB_PASSWORD);
+			dbConn = DbUtil.getTempConnection("VAData","root", "rootpass");
+		
+			//dbConn = DbUtil.getTempConnection(Configuration.DB_NAME, Configuration.DB_USER, Configuration.DB_PASSWORD);
 			
 			if(!isDuplicateMsg(dbConn, account.getAccountCode(), xmlData)){  //filter out duplicate message
 				PreparedStatement preparedStatement = null;				
