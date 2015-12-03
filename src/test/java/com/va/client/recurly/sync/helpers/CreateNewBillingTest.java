@@ -25,7 +25,7 @@ import com.va.reusable.db.DbUtil;
 import com.va.session.BizManager;
 import com.va.session.BizManagerUtil;
 
-public class CreateNewAccountTest {
+public class CreateNewBillingTest {
 	static BizManager bizManager;
 	static RecurlyClient client;
 	static com.ning.billing.recurly.model.Account accountR;
@@ -54,17 +54,17 @@ public class CreateNewAccountTest {
 	}
 	
 	@Test
-	public void testCreateNewAccount() throws RemoteException, VAException {
+	public void testCreateNewBilling() throws RemoteException, VAException {
 		
 		CreateNewAccount.createNewAccount(memberId, bizManager, client);
-		AccountInfo account = bizManager.viewAccount(memberId);
-		assertEquals(account._name,"test1");
-		assertEquals(account._lastName,"test2");
-
-		
+		AccountInfo account = bizManager.viewAccount(memberId);			
 		AddressInfo addressInfo = bizManager.viewAddress(memberId);
-		assertEquals(addressInfo._city, "Mt Pleasant");
-		
+	
+		CreateNewBillingInfo.createNewBillingInfo(memberId, bizManager, client);
+		CreditCardInfo ccInfo = bizManager.viewCreditCard(memberId);
+		assertEquals(ccInfo._street,"1061 Johnnie Dodds Blvd, Apt E-8");
+		assertEquals("vs",ccInfo._cardType);
+	
 	}
 	
 
