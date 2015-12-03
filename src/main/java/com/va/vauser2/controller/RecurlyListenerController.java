@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.va.client.recurly.events.models.AccountE;
 import com.va.client.recurly.events.notifications.BaseNotification;
 import com.va.client.recurly.unmarshall.UnmarshallUtil;
+import com.va.client.recurly.unmarshall.VAXmlUtil;
 import com.va.core.Configuration;
 import com.va.reusable.db.DbUtil;
 import com.va.reusable.util.DateUtil;
@@ -130,7 +131,7 @@ public class RecurlyListenerController {
 	private static int getNotificationPriority(Connection dbConn, String xmlData) throws JDOMException, IOException, SQLException{
 		int priority=20; //default last priority
 		
-		String notification= UnmarshallUtil.getRootElementName(xmlData);		
+		String notification= VAXmlUtil.getRootElementName(xmlData);		
 		
 		PreparedStatement preparedStatement = null;
 		String selectSQL = "select priority from recurlypriority where notification=?";

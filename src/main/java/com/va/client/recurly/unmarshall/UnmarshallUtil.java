@@ -15,7 +15,6 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import com.ning.billing.recurly.RecurlyClient;
-import com.ning.billing.recurly.model.Subscription;
 import com.va.client.recurly.events.notifications.BillingInfoUpdatedNotification;
 import com.va.client.recurly.events.notifications.CanceledAccountNotification;
 import com.va.client.recurly.events.notifications.CanceledSubscriptionNotification;
@@ -136,7 +135,7 @@ public class UnmarshallUtil {
 
 	private static Class getNotificationClass(String xmlData) throws JDOMException, IOException{
 		Class notificationClass = null;
-		String rootElementName=getRootElementName(xmlData);
+		String rootElementName=VAXmlUtil.getRootElementName(xmlData);
 		if(rootElementName.equals("canceled_account_nrivateotification")){
 			notificationClass=CanceledAccountNotification.class;
 		}else if(rootElementName.equals("new_account_notification")){
@@ -187,13 +186,5 @@ public class UnmarshallUtil {
 		Object event = (Object) unmarshaller.unmarshal(reader);
 		return event;
 	}	
-	
-	public static String getRootElementName(String xmlData) throws JDOMException, IOException{
-		SAXBuilder saxBuilder = new SAXBuilder();		
-		Document doc = saxBuilder.build(new StringReader(xmlData));
-		String notificationName = doc.getRootElement().getName();
-		 return notificationName;
-	}
-	
 
 }

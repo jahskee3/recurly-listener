@@ -17,7 +17,8 @@ public class BizManagerUtil {
 	private static final Logger logger = Logger.getLogger(BizManagerUtil.class);
 
 	public static BizManager createBizManager() throws NamingException, RemoteException, CreateException {
-		return createBizManager(Configuration.JNDI_SERVER);
+		return createBizManager("10.0.0.2:1099");
+		//return createBizManager(Configuration.JNDI_SERVER);
 	}
 
 	public static BizManager createBizManager(String server) throws NamingException, RemoteException, CreateException {

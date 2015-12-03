@@ -4,7 +4,6 @@ package com.va.client.recurly.handler;
 import org.apache.log4j.Logger;
 
 import com.ning.billing.recurly.RecurlyClient;
-import com.va.client.recurly.events.models.AccountE;
 import com.va.client.recurly.events.notifications.BillingInfoUpdatedNotification;
 import com.va.client.recurly.events.notifications.CanceledAccountNotification;
 import com.va.client.recurly.events.notifications.CanceledSubscriptionNotification;
