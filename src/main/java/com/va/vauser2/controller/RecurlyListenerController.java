@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
@@ -23,82 +22,67 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.va.client.recurly.events.models.AccountE;
 import com.va.client.recurly.events.notifications.BaseNotification;
 import com.va.client.recurly.unmarshall.UnmarshallUtil;
-import com.va.client.recurly.unmarshall.VAXmlUtil;
-import com.va.core.Configuration;
 import com.va.reusable.db.DbUtil;
-import com.va.reusable.util.DateUtil;
-
 
 
 @Controller
 public class RecurlyListenerController {
 	
 	private static final Logger log = Logger.getLogger(RecurlyListenerController.class);
-	
-	public static void main(String[] args) throws JDOMException, IOException, JAXBException, SQLException{
-		
-		String xmlData = "<?xml version=\"1.0\" encoding='UTF-8'?> <new_account_notification> <account> <account_code>2</account_code> <username nil=\"true\"></username> <email>verena@example.com</email> <first_name>Verena</first_name> <last_name>Example</last_name> <company_name nil='true'></company_name> </account> </new_account_notification>";
-		xmlData=sanitizeXmlChars(xmlData).replaceAll("\\<\\?xml(.+?)\\?\\>", "").trim().replaceAll("\"", "'");
-		
-		System.out.println(xmlData);
-		//saveNotificationToDB(xmlData);
-	}
 
     @RequestMapping(value = "/recurly/listener", method = RequestMethod.POST)
     public String listenerPost(ModelMap model, HttpServletRequest request) throws IOException, JDOMException, JAXBException, SQLException {
-    	long lStartTime = new Date().getTime();
+    
     	InputStream xml = request.getInputStream();    	
     	StringWriter writer = new StringWriter();
     	IOUtils.copy(xml, writer, "UTF-8");
     	String xmlData = writer.toString();
-    	xmlData=sanitizeXmlChars(xmlData).replaceAll("\\<\\?xml(.+?)\\?\\>", "").trim().replaceAll("\"", "'");    	
-    	saveNotificationToDB(xmlData);
-    	long lEndTime = new Date().getTime();
-    	long difference = lEndTime - lStartTime;
-    	log.info("RecurlyListeneter execution time in milliseconds: " + difference);
-    	System.out.println("RecurlyListeneter execution time in milliseconds: " + difference);
+    	xmlData=sanitizeXmlChars(xmlData).replaceAll("\\<\\?xml(.+?)\\?\\>", "").trim().replaceAll("\"", "'");  
+    	
+    	setForSynchronization(xmlData);    	
+    
     	return "listener";
         
     }
     
     //for testing purpose
+    //actual url is https://76.26.204.56/recurly-listener/recurly/listener.va
 	@RequestMapping(value = "/recurly/listener", method = RequestMethod.GET)
 	   public String listener(ModelMap model, HttpServletRequest request) throws IOException, JDOMException, JAXBException, SQLException {
-		log.info("Hello world");
+		log.info("Recurly listener is working...");
 		model.addAttribute("msg", "Testing Recurly webhook listener!");
         return "listener";
     }
 	
-	private static void saveNotificationToDB(String xmlData) throws JDOMException, IOException, JAXBException, SQLException{
+	private static void setForSynchronization(String xmlData) throws JDOMException, IOException, JAXBException, SQLException{
 		Object event = UnmarshallUtil.getEvent(xmlData);
 		BaseNotification notification = (BaseNotification) event;
 		
-		String notificationRootElement = VAXmlUtil.getRootElementName(xmlData);
+		AccountE account = notification.getAccount();
+		String memberId = account.getAccountCode();
 		
-		AccountE account = notification.getAccount();		
 		Connection dbConn=null;
 		try{
 			dbConn = DbUtil.getTempConnection("VAData","root", "rootpass");
 		
 			//dbConn = DbUtil.getTempConnection(Configuration.DB_NAME, Configuration.DB_USER, Configuration.DB_PASSWORD);
+			PreparedStatement preparedStatement = null;
 			
-			if(!isDuplicateMsg(dbConn, account.getAccountCode(), xmlData)){  //filter out duplicate message
-				PreparedStatement preparedStatement = null;				
+			String sqlStr=null;
+			if(!isMemberIdExist(dbConn, account.getAccountCode())){				
+				sqlStr = "insert into recurlymsg(memberId, issync) values(?,0)";		
+				preparedStatement = dbConn.prepareStatement(sqlStr);		
+				preparedStatement.setString(1, memberId);			
 				
-				String insertTableSQL = "insert into recurlymsg(memberId, created, notification, priority, isdelete) values(?,?,?,?,?)";		
-				preparedStatement = dbConn.prepareStatement(insertTableSQL);
-		
-				preparedStatement.setString(1, account.getAccountCode());
-				preparedStatement.setTimestamp(2, DateUtil.getCurrentSqlTimestamp());
-				preparedStatement.setString(3, notificationRootElement);
-				
-				int msgPriority=getNotificationPriority(dbConn, xmlData);
-				preparedStatement.setInt(4,msgPriority); //priority
-				preparedStatement.setInt(5,0); //isprocessed
-				preparedStatement.execute();				
 			}else{
-				log.info("ignore, duplicate recurly message found for "+account.getAccountCode());
+				//set memberId issync back to 0;
+				sqlStr = "update recurlymsg set issync=0 where memberId=?";		
+				preparedStatement = dbConn.prepareStatement(sqlStr);		
+				preparedStatement.setString(1, memberId);		
 			}
+			
+			preparedStatement.executeUpdate();	
+			log.info("memberid "+memberId+" marked for recurly synchronization");
 			
 		}catch(SQLException e){
 			throw new SQLException(e);
@@ -109,47 +93,23 @@ public class RecurlyListenerController {
 		}
 	}
 	
-	private static boolean isDuplicateMsg(Connection dbConn, String memberId, String xmlData) throws SQLException{
-		boolean isDuplicateMsg = false;
+	private static boolean isMemberIdExist(Connection dbConn, String memberId) throws SQLException{
+		boolean isMemberIdExist = false;
 		PreparedStatement preparedStatement = null;
-		String selectSQL = "select memberid from recurlymsg where memberId=? and notification=? and isdelete=0";
+		String selectSQL = "select memberid from recurlymsg where memberId=?"; 
 
 		preparedStatement = dbConn.prepareStatement(selectSQL);
-		preparedStatement.setString(1, memberId);
-		preparedStatement.setString(2, xmlData);
+		preparedStatement.setString(1, memberId);	
 		
 		ResultSet rs = preparedStatement.executeQuery();
 
 		while (rs.next()) {
-			isDuplicateMsg =true;
+			isMemberIdExist =true;
 			break;
-		}
-		
-		
-		
-		return isDuplicateMsg;
-	}
-	
-	private static int getNotificationPriority(Connection dbConn, String xmlData) throws JDOMException, IOException, SQLException{
-		int priority=20; //default last priority
-		
-		String notification= VAXmlUtil.getRootElementName(xmlData);		
-		
-		PreparedStatement preparedStatement = null;
-		String selectSQL = "select priority from recurlypriority where notification=?";
-
-		preparedStatement = dbConn.prepareStatement(selectSQL);
-		preparedStatement.setString(1, notification);
-
-		// execute select SQL stetement
-		ResultSet rs = preparedStatement.executeQuery();
-
-		while (rs.next()) {
-			priority = rs.getInt("priority");
-		}
-		System.out.println("priority is "+priority);
-		return priority;
-	}
+		}	
+			
+		return isMemberIdExist;
+	}	
 	
 	public static String sanitizeXmlChars(String in) {
 	    StringBuilder out = new StringBuilder();

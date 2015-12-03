@@ -19,6 +19,8 @@ import org.junit.Test;
 import com.ning.billing.recurly.RecurlyClient;
 import com.va.core.VAException;
 import com.va.data.AccountInfo;
+import com.va.data.AddressInfo;
+import com.va.data.CreditCardInfo;
 import com.va.recurly.utils.VARecurlyConfig;
 import com.va.reusable.db.DbUtil;
 import com.va.session.BizManager;
@@ -59,8 +61,18 @@ public class CreateNewAccountTest {
 		AccountInfo account = bizManager.viewAccount(memberId);
 		assertEquals(account._name,"test1");
 		assertEquals(account._lastName,"test2");
+
 		
+		AddressInfo addressInfo = bizManager.viewAddress(memberId);
+		assertEquals(addressInfo._city, "Mt Pleasant");
+	
+		CreateNewBillingInfo.createNewBillingInfo(memberId, bizManager, client);
+		CreditCardInfo ccInfo = bizManager.viewCreditCard(memberId);
+		assertEquals(ccInfo._street,"1061 Johnnie Dodds Blvd, Apt E-8");
+		assertEquals("vs",ccInfo._cardType);
+	
 	}
+	
 
 	
 	
@@ -72,6 +84,7 @@ public class CreateNewAccountTest {
 			
 		client.close();
 		dbConn.close();
+		
 	}
 	
 	@Before
@@ -81,15 +94,10 @@ public class CreateNewAccountTest {
 	}
 	
 	@After
-	public void tearDown() throws SQLException{
+	public void tearDown() throws SQLException, RemoteException, VAException{
 		System.out.println("@After - tearDown");
-		
-		String selectSQL = "delete from account where memberId = ?";
-		
-		PreparedStatement preparedStatement = dbConn.prepareStatement(selectSQL);
-		preparedStatement.setString(1, memberId);
-		preparedStatement.execute();
-		System.out.println("completed deleting memberId "+memberId);
+		bizManager.destroyAccountByMemberId(memberId);
+	
 		
 		
 		
