@@ -30,6 +30,8 @@ public class RecurlyListenerController {
 	
 	private static final Logger log = Logger.getLogger(RecurlyListenerController.class);
 
+	//for testing purpose
+    //actual url is https://76.26.204.56/recurly-listener/recurly/listener.va
     @RequestMapping(value = "/recurly/listener", method = RequestMethod.POST)
     public String listenerPost(ModelMap model, HttpServletRequest request) throws IOException, JDOMException, JAXBException, SQLException {
     
