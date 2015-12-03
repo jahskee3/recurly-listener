@@ -73,6 +73,8 @@ public class RecurlyListenerController {
 		Object event = UnmarshallUtil.getEvent(xmlData);
 		BaseNotification notification = (BaseNotification) event;
 		
+		String notificationRootElement = VAXmlUtil.getRootElementName(xmlData);
+		
 		AccountE account = notification.getAccount();		
 		Connection dbConn=null;
 		try{
@@ -83,12 +85,12 @@ public class RecurlyListenerController {
 			if(!isDuplicateMsg(dbConn, account.getAccountCode(), xmlData)){  //filter out duplicate message
 				PreparedStatement preparedStatement = null;				
 				
-				String insertTableSQL = "insert into recurlymsg(memberId, created, xmldata, priority, isdelete) values(?,?,?,?,?)";		
+				String insertTableSQL = "insert into recurlymsg(memberId, created, notification, priority, isdelete) values(?,?,?,?,?)";		
 				preparedStatement = dbConn.prepareStatement(insertTableSQL);
 		
 				preparedStatement.setString(1, account.getAccountCode());
 				preparedStatement.setTimestamp(2, DateUtil.getCurrentSqlTimestamp());
-				preparedStatement.setString(3, xmlData);
+				preparedStatement.setString(3, notificationRootElement);
 				
 				int msgPriority=getNotificationPriority(dbConn, xmlData);
 				preparedStatement.setInt(4,msgPriority); //priority
@@ -110,7 +112,7 @@ public class RecurlyListenerController {
 	private static boolean isDuplicateMsg(Connection dbConn, String memberId, String xmlData) throws SQLException{
 		boolean isDuplicateMsg = false;
 		PreparedStatement preparedStatement = null;
-		String selectSQL = "select memberid from recurlymsg where memberId=? and xmldata=? and isdelete=0";
+		String selectSQL = "select memberid from recurlymsg where memberId=? and notification=? and isdelete=0";
 
 		preparedStatement = dbConn.prepareStatement(selectSQL);
 		preparedStatement.setString(1, memberId);
