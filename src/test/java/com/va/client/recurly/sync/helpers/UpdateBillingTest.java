@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -25,7 +26,7 @@ import com.va.reusable.db.DbUtil;
 import com.va.session.BizManager;
 import com.va.session.BizManagerUtil;
 
-public class CreateNewBillingTest {
+public class UpdateBillingTest {
 	static BizManager bizManager;
 	static RecurlyClient client;
 	static com.ning.billing.recurly.model.Account accountR;
@@ -53,23 +54,38 @@ public class CreateNewBillingTest {
 			dbConn = DbUtil.getTempConnection("VAData", "root", "rootpass");
 	}
 	
+	
 	@Test
-	public void testCreateNewBilling() throws RemoteException, VAException {
+	public void testUpdateBilling() throws RemoteException, VAException {
 		
-		CreateNewAccount.createNewAccount(memberId, bizManager, client);
+		com.ning.billing.recurly.model.BillingInfo billingR = client.getBillingInfo(memberId);
+		String firstName = RandomStringUtils.randomAlphabetic(10);
+		billingR.setFirstName(firstName);
+		client.createOrUpdateBillingInfo(billingR);
+		UpdateBillingInfo.updateBillingInfo(memberId, bizManager, client);
+	
+		/*	CreateNewAccount.createNewAccount(memberId, bizManager, client);
 		AccountInfo account = bizManager.viewAccount(memberId);			
 		AddressInfo addressInfo = bizManager.viewAddress(memberId);
 	
 		CreateNewBillingInfo.createNewBillingInfo(memberId, bizManager, client);
 		CreditCardInfo ccInfo = bizManager.viewCreditCard(memberId);
 		assertEquals(ccInfo._street,"1061 Johnnie Dodds Blvd, Apt E-8");
-		assertEquals("vs",ccInfo._cardType);
+		assertEquals("vs",ccInfo._cardType);*/
+		
 	
-	}	
+	
+	}
+	
+
+	
+	
 	
 	@AfterClass
 	public static void oneTimeTearDown() throws SQLException{
-		System.out.println("@AfterClass - oneTimeTearDown");				
+		System.out.println("@AfterClass - oneTimeTearDown");
+		
+			
 		client.close();
 		dbConn.close();
 		
@@ -84,7 +100,10 @@ public class CreateNewBillingTest {
 	@After
 	public void tearDown() throws SQLException, RemoteException, VAException{
 		System.out.println("@After - tearDown");
-		bizManager.destroyAccountByMemberId(memberId);			
+		//bizManager.destroyAccountByMemberId(memberId);
+	
+		
+		
 		
 	}
 	
