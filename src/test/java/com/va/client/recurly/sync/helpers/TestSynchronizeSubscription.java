@@ -8,15 +8,16 @@ import javax.ejb.CreateException;
 import javax.naming.NamingException;
 
 import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 import com.ning.billing.recurly.RecurlyClient;
 import com.ning.billing.recurly.model.Subscription;
+import com.va.client.recurly.sync.SynchronizeSubscription;
 import com.va.core.VAException;
 import com.va.data.AccountInfo;
 import com.va.data.AddressInfo;
