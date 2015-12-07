@@ -86,7 +86,7 @@ public class TestSynchronizeSubscription {
 	}
 	
 	@Test
-	public void testIsSubscriptIsChanged() throws RemoteException, VAException{
+	public void testIsSubscriptChanged() throws RemoteException, VAException{
 		
 		AccountInfo account = bizManager.viewAccount(memberId);
 
